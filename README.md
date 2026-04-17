@@ -17,6 +17,9 @@ packages/agent-swarm-framework/
 └── docs/                   # documentation
     ├── install.md          # CLI reference
     ├── architecture.md     # directory structure and design
+    ├── CONVERSATION_GATE_REASON_CODES.md    # canonical reason_code list for conversation gate
+  ├── intake-channel-boundary.md              # core vs channel boundary memo
+  ├── intake-channel-boundary-checklist.md    # implementation checklist from boundary policy
     └── VISION_AUTONOMOUS_ORCHESTRATION.md
 ```
 
@@ -100,6 +103,18 @@ For full details, see [docs/install.md](docs/install.md).
 
 ---
 
+## Boundary with Dotfiles
+
+ASF owns workflow-specific coordination behavior.
+dotfiles owns shared environment and language-level AI rules.
+
+- ASF owns: delegation pattern, conversation-gate reason codes, runtime coordination scripts, role workflow behavior
+- dotfiles owns: shared writing/development rules, common instruction style, reusable shell/editor environment conventions
+
+ASF can be used standalone, but when dotfiles is present, treat dotfiles as base policy and ASF as workflow layer.
+
+---
+
 ## Documentation
 
 ## Core Roles
@@ -122,6 +137,9 @@ For full details, see [docs/install.md](docs/install.md).
 - [docs/runtime-operations.md](docs/runtime-operations.md) — release procedures and operations
 - [docs/STATE_MANAGEMENT.md](docs/STATE_MANAGEMENT.md) — state management details
 - [docs/PACKAGE_DISTRIBUTION.md](docs/PACKAGE_DISTRIBUTION.md) — distribution, boundaries, version rules
+- [docs/intake-channel-boundary.md](docs/intake-channel-boundary.md) — intake boundary policy memo (core vs channel adapter)
+- [docs/intake-channel-boundary-checklist.md](docs/intake-channel-boundary-checklist.md) — boundary policy implementation checklist
+- [docs/CONVERSATION_GATE_REASON_CODES.md](docs/CONVERSATION_GATE_REASON_CODES.md) — canonical reason_code list for conversation gate decisions
 
 ---
 
