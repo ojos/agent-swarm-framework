@@ -57,7 +57,7 @@ bash scripts/asf up --interval 15
 bash scripts/asf down
 ```
 
-doctor モードでは、必須ファイル/スクリプト、コマンド可用性、`gh auth`、hook path の健全性を確認します。
+doctor モードでは、必須ファイル/スクリプト、必須コマンドの可用性（bash, git, jq, gh）、`gh auth` の状態、hook path の健全性を確認します。
 
 既存プロジェクトへの途中導入（Retrofit）:
 - ASF は新規リポジトリだけでなく既存リポジトリへ段階導入できる。
@@ -84,6 +84,16 @@ standalone 実行時（install.sh 単体）の動作:
 | line strategy | `fixed2` |
 | orchestrator mode | `remote` |
 | state backend | `hybrid` |
+
+## AI エンジン導入マトリックス
+
+Agent Swarm Framework (ASF) および DevContainer Bootstrap (DCB) における、共通のエンジンルーティングと導入・認証要件のマトリックスです。
+
+| エンジン | コマンド | 認証環境変数 | 導入経路 (モード) | 未導入・未認証時の挙動 |
+|----------|----------|--------------|-------------------|------------------------|
+| Claude | `claude` | `CLAUDE_CODE_OAUTH_TOKEN` | DCB の `minimal` / `standard` / `full` で生成される `scripts/install-ai-tools.sh` を `postCreateCommand` で実行 | トークン/認証不足時はログインプロンプト表示またはエラー終了 |
+| Gemini | `gemini` | `GEMINI_API_KEY` | DCB の `minimal` / `standard` / `full` で生成される `scripts/install-ai-tools.sh` を `postCreateCommand` で実行 | API キー不足または API/認証エラーで失敗 |
+| Codex  | `codex` | `OPENAI_API_KEY` | すべてのモードで手動導入のみ（DCB による自動導入なし） | バイナリ未導入または API キー未設定で失敗 |
 
 ## バージョン方針
 
@@ -120,8 +130,8 @@ ASF は単体利用も可能ですが、dotfiles を併用する場合は、dotf
 
 | 症状 | 対策 |
 |------|------|
-| `gh: command not found` | GitHub CLI をインストールして `gh auth login` |
-| `jq: command not found` | `apt install jq` または `brew install jq` |
+| `gh: command not found` | GitHub CLI をインストール（必須）して `gh auth login` |
+| `jq: command not found` | jq をインストール（必須）: `apt install jq` または `brew install jq` |
 | `error: --non-interactive requires --config` | `--config <file>` を必ず併用する |
 | ファイルが意図せず上書きされる | プレビューの「上書き予定」欄を必ず確認する |
 | milestone/issue が反映されない | `--skip-github` 有無と `gh auth status` を確認する |
@@ -140,3 +150,4 @@ E2E も含める場合:
 ```bash
 RUN_E2E_TESTS=true bash packages/agent-swarm-framework/tests/run-shell-tests.sh
 ```
+
