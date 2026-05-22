@@ -1,0 +1,13 @@
+{
+  "package": "agent-swarm-framework",
+  "version": "0.1.4",
+  "assets": [
+    "RELEASE-MANIFEST.json",
+    "SHA256SUMS",
+    "PACKAGE_ARCHIVE.tar.gz"
+  ],
+  "checksums": {
+    "PACKAGE_ARCHIVE.tar.gz": "c923e43adb612e5e60bc94cc2a38444924943d3ce07e7c9746ee0f0411e6a812",
+    "SHA256SUMS": "acb4be35dea6dd6c52949129ae0cd35692906a5e4bc9dc71b3f00e55d5a3590e"
+  }
+}
