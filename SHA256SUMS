@@ -24,8 +24,8 @@ b8d07510d227b88e7b7e28b324df3d73fddfac5904284eded4d0f9ccd9f9ddd6  ./executors/gi
 7dceffa944d4bab7dcfc380747f1894bd4ebf74fe12feb2b4c2d8dd056295d08  ./executors/README.md
 2a3ee84d3216b00fed9a013e941bfdefe07aea09c293335ce22c3ef390a86414  ./init.sh
 9a906e29534ec1b830e14c97bd74ab3e5a05d7c7f596d20ddac1ff1312c245c5  ./install.sh
-c923e43adb612e5e60bc94cc2a38444924943d3ce07e7c9746ee0f0411e6a812  ./PACKAGE_ARCHIVE.tar.gz
-c981c19054390ce8e9bfed1020982a2e794d2ae4fdeea87dbbfb8995444dacdc  ./README.md
+92645cb9bfe7759a6f1d8a9739ff0c77ab67ab3f14360e118363400823e66ae1  ./PACKAGE_ARCHIVE.tar.gz
+858e023e624dab4ff77a28b16eaf5a2f920dd5c953b19ac606b967c450dac46a  ./README.md
 905ae06cb03c65a19b290911b83d049fddf9a482b37b778d9bdeb4bea62b348e  ./retrofit-config.sample.json
 eee9963799f46f1546779b8e800e53b0647a2abb0942f230babe90eb36341bf1  ./runtime-core/files/scripts/asf
 de454698119a1e724c687b78f09e51c02ab17e62fffc9580c5d853c41d5fce6c  ./runtime-core/files/scripts/gate/asf-doctor.sh
