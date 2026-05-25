@@ -45,11 +45,6 @@ bash packages/agent-swarm-framework/install.sh \
 補足:
 - `--retrofit-safe` は安全プリセットを強制適用する。
   - `executionMode=local`
-  - `remoteProvider=none`
-  - `automationStage=plan`
-  - `mergePolicy=manual`
-  - `orchestratorMode=local`
-  - `--skip-github` 自動有効化
 - カテゴリ適用の既定値も安全側に切り替える。
   - `runtime-core` / `agent-skills`: 適用
   - `executors` / `template-project`: スキップ
@@ -141,6 +136,7 @@ bash install.sh \
 - install.sh 単体で実行された場合、同梱 package レイアウトが見つからなければ archive を取得して再実行する。
 - 取得元 URL は `--bootstrap-from <url>` または環境変数 `AGENT_SWARM_FRAMEWORK_ARCHIVE_URL` で指定できる。
 - 未指定時は main ブランチ archive を使用する。
+- `dotfiles` は ASF と別リポジトリの共通ルール資産であり、同時導入する場合は [ai-dotfiles README](https://github.com/ojos/ai-dotfiles/blob/main/README.md) も参照する。
 
 ### オプション一覧
 
@@ -158,6 +154,8 @@ bash install.sh \
 | `--non-interactive` | — | false | 非インタラクティブモード（`--config` と併用必須） |
 | `--skip-github` | — | false | GitHub milestone/issue 作成をスキップ |
 | `-h` / `--help` | — | — | ヘルプを表示して終了 |
+
+`dotfiles` は `ojos/ai-dotfiles` で公開している共通ルールの正本です。ASF と同時導入する場合は、dotfiles 側の README も参照してください。
 
 ---
 
