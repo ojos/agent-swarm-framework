@@ -114,11 +114,11 @@ bash "$INSTALL_SCRIPT" \
   --config "$PACKAGE_ROOT/retrofit-config.sample.json" \
   --target-dir "$TARGET_RETROFIT"
 
-# runtime-core / agent-skills は適用される
+# runtime-core / agent-definitions は適用される
 for expected in \
   "scripts/gate/workflow.sh" \
   "scripts/monitor/monitor-overview.sh" \
-  ".multi-agent/skills/orchestrator.md"; do
+  ".multi-agent/role-contracts/orchestrator.md"; do
   if [[ -f "$TARGET_RETROFIT/$expected" ]]; then
     echo "  [PASS] retrofit-safe 適用: $expected"
   else

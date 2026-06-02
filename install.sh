@@ -41,6 +41,7 @@ options:
   --dotfiles-from <path|url> Dotfiles source (directory/file path or archive URL)
   --dotfiles-conflict-policy <skip|overwrite|prompt>
                               Policy when dotfiles target file already exists (default: skip)
+  Note: dotfiles are maintained in the separate repository ojos/ai-dotfiles
   --non-interactive          Do not ask questions; requires --config
   --skip-github              Skip milestone/issue creation step
   -h, --help                 Show help
@@ -50,14 +51,14 @@ EOF
 package_layout_ready() {
   [[ -f "$PACKAGE_ROOT/config.schema.json" ]] &&
   [[ -d "$PACKAGE_ROOT/runtime-core" ]] &&
-  [[ -d "$PACKAGE_ROOT/agent-skills" ]] &&
+  [[ -d "$PACKAGE_ROOT/agent-definitions" ]] &&
   [[ -d "$PACKAGE_ROOT/executors" ]] &&
   [[ -d "$PACKAGE_ROOT/template-project" ]]
 }
 
 bootstrap_standalone_mode() {
   local archive_url="${BOOTSTRAP_FROM:-${AGENT_SWARM_FRAMEWORK_ARCHIVE_URL:-$DEFAULT_BOOTSTRAP_FROM}}"
-  local tmp_root archive_file extracted_root candidate_install candidate_root
+  local tmp_root archive_file extracted_root candidate_install candidate_root found_layout
 
   if [[ "${AGENT_SWARM_FRAMEWORK_BOOTSTRAPPED:-}" == "1" ]]; then
     echo "error: standalone bootstrap failed to locate package layout after extraction" >&2
@@ -75,16 +76,17 @@ bootstrap_standalone_mode() {
   curl -fsSL "$archive_url" -o "$archive_file"
   tar -xzf "$archive_file" -C "$tmp_root"
 
-  candidate_install="$(find "$tmp_root" -type f -path '*/packages/agent-swarm-framework/install.sh' | head -n 1 || true)"
-  if [[ -z "$candidate_install" ]]; then
-    candidate_install="$(find "$tmp_root" -type f -path '*/agent-swarm-framework/install.sh' | head -n 1 || true)"
-  fi
-  [[ -n "$candidate_install" ]] || { echo "error: install.sh not found in downloaded archive" >&2; exit 1; }
+  found_layout="false"
+  while IFS= read -r candidate_install; do
+    candidate_root="$(cd "$(dirname "$candidate_install")" && pwd)"
+    if [[ -f "$candidate_root/config.schema.json" ]] && [[ -d "$candidate_root/runtime-core" ]] && [[ -d "$candidate_root/agent-definitions" ]] && [[ -d "$candidate_root/executors" ]] && [[ -d "$candidate_root/template-project" ]]; then
+      extracted_root="$candidate_root"
+      found_layout="true"
+      break
+    fi
+  done < <(find "$tmp_root" -type f \( -path '*/packages/agent-swarm-framework/install.sh' -o -path '*/agent-swarm-framework/install.sh' -o -name 'install.sh' \) | sort)
 
-  candidate_root="$(cd "$(dirname "$candidate_install")" && pwd)"
-  extracted_root="$candidate_root"
-
-  if [[ ! -f "$extracted_root/config.schema.json" ]] || [[ ! -d "$extracted_root/runtime-core" ]]; then
+  if [[ "$found_layout" != "true" ]]; then
     echo "error: downloaded archive does not contain a valid agent-swarm-framework package" >&2
     exit 1
   fi
@@ -391,7 +393,7 @@ EOF
 default_apply_for_category() {
   local category="$1"
   if [[ "$RETROFIT_SAFE" == "true" ]]; then
-    if [[ "$category" == "runtime-core" || "$category" == "agent-skills" ]]; then
+    if [[ "$category" == "runtime-core" || "$category" == "agent-definitions" ]]; then
       printf 'y'
       return
     fi
@@ -556,8 +558,8 @@ copy_category_preview() {
     runtime-core)
       cp -R "$PACKAGE_ROOT/runtime-core/files/." "$preview_root/"
       ;;
-    agent-skills)
-      cp -R "$PACKAGE_ROOT/agent-skills/files/." "$preview_root/"
+    agent-definitions)
+      cp -R "$PACKAGE_ROOT/agent-definitions/files/." "$preview_root/"
       ;;
     executors)
       cp -R "$PACKAGE_ROOT/executors/github-actions/files/." "$preview_root/"
@@ -576,7 +578,7 @@ build_preview() {
 
   printf '%s\n' "$config_json" > "$preview_root/.agent-swarm-framework.config.json"
   jq -n --argjson cfg "$config_json" '{generatedAt:(now|todateiso8601), config:$cfg}' > "$preview_root/.agent-swarm-framework.manifest.json"
-  for category in runtime-core agent-skills executors template-project; do
+  for category in runtime-core agent-definitions executors template-project; do
     if [[ "$category" == "executors" ]]; then
       local remote_provider
       remote_provider="$(printf '%s' "$config_json" | jq -r '.remoteProvider')"
@@ -657,15 +659,15 @@ build_preview "$CONFIG_JSON" "$PREVIEW_DIR"
 echo
 echo "Preview generated: $PREVIEW_DIR"
 echo "Target repository: $TARGET_DIR"
-echo "Categories available: runtime-core, agent-skills, executors, template-project"
+echo "Categories available: runtime-core, agent-definitions, executors, template-project"
 if [[ "$RETROFIT_SAFE" == "true" ]]; then
-  echo "Apply policy (retrofit-safe): runtime-core/agent-skills=default apply, executors/template-project=default skip"
+  echo "Apply policy (retrofit-safe): runtime-core/agent-definitions=default apply, executors/template-project=default skip"
 elif [[ "$NON_INTERACTIVE" == "true" ]]; then
   echo "Apply policy (non-interactive): enabled categories are auto-applied"
 fi
 echo
 
-for category in runtime-core agent-skills executors template-project; do
+for category in runtime-core agent-definitions executors template-project; do
   if ! category_enabled "$category" "$CONFIG_JSON"; then
     echo "Skipped unavailable category: $category"
     echo

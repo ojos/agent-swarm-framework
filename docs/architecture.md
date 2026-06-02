@@ -49,15 +49,23 @@ packages/agent-swarm-framework/
 │               ├── worker-dead-letter.sh
 │               ├── workers-start.sh
 │               └── workers-stop.sh
-├── agent-skills/                   # エージェントスキル定義カテゴリ
+├── agent-definitions/              # ロール契約・タスク手順・外部フィード定義カテゴリ
 │   ├── README.md
 │   └── files/
-│       └── .multi-agent/skills/
-│           ├── orchestrator.md
-│           ├── planner.md
-│           ├── implementer.md
-│           ├── reviewer.md
-│           └── closer.md
+│       └── .multi-agent/
+│           ├── role-contracts/
+│           │   ├── orchestrator.md
+│           │   ├── planner.md
+│           │   ├── implementer.md
+│           │   ├── reviewer.md
+│           │   ├── closer.md
+│           │   ├── intake-manager.md
+│           │   └── consult-facilitator.md
+│           └── task-playbooks/
+│               ├── issue-triage.md
+│               ├── plan-breakdown.md
+│               ├── pr-review.md
+│               └── issue-close-policy.md
 ├── executors/                      # リモート実行カテゴリ
 │   ├── README.md
 │   └── github-actions/
@@ -78,7 +86,7 @@ packages/agent-swarm-framework/
     └── <projectSlug>/              # install.sh 実行時に自動生成
       ├── .agent-swarm-framework.config.json
       ├── .agent-swarm-framework.manifest.json
-        └── （runtime-core / agent-skills / executors / template-project の展開物）
+        └── （runtime-core / agent-definitions / executors / template-project の展開物）
 ```
 
 ---
@@ -97,11 +105,12 @@ packages/agent-swarm-framework/
 | `monitor/` | ライン状況・インシデント・マージキューの監視 |
 | `worker/` | LINE ワーカー・クローザーワーカー・オーケストレーター |
 
-### agent-skills
+### agent-definitions
 
-- **役割**: 各エージェントロールの行動指針を Markdown で定義
-- **配置先**: `.multi-agent/skills/`
-- **ロール一覧**: `orchestrator` / `planner` / `implementer` / `reviewer` / `closer`
+- **役割**: ロール契約とタスク手順を Markdown で定義
+- **配置先**: `.multi-agent/role-contracts/`（ロール契約）と `.multi-agent/task-playbooks/`（再利用手順）
+- **ロール一覧**: `orchestrator` / `planner` / `implementer` / `reviewer` / `closer` / `intake-manager` / `consult-facilitator`
+- **初期タスク手順**: `issue-triage` / `plan-breakdown` / `pr-review` / `issue-close-policy`
 
 ### executors
 
@@ -130,7 +139,7 @@ install.sh 実行
     │
     ├─ カテゴリ確認ループ
     │   ├─ runtime-core     → [y/N] → --target-dir に適用
-    │   ├─ agent-skills     → [y/N] → --target-dir に適用
+    │   ├─ agent-definitions → [y/N] → --target-dir に適用
     │   ├─ executors        → [y/N] → --target-dir に適用（条件付き）
     │   └─ template-project → [y/N] → --target-dir に適用
     │
@@ -220,3 +229,7 @@ install.sh 実行
 - [VISION_AUTONOMOUS_ORCHESTRATION.md](./VISION_AUTONOMOUS_ORCHESTRATION.md) — 自律オーケストレーション最終ビジョン
 - [STATE_MANAGEMENT.md](./STATE_MANAGEMENT.md) — 状態管理詳細
 - [github-actions.md](./github-actions.md) — GitHub Actions executor 詳細
+- [ROLE_CONTRACT_TASK_PLAYBOOK_GUIDELINES.md](./ROLE_CONTRACT_TASK_PLAYBOOK_GUIDELINES.md) — ロール契約とタスクプレイブックの作成規範
+- [operational-pr-review-checklist.md](./operational-pr-review-checklist.md) — PR レビュー運用チェックリスト
+- [manual-trend-ingestion-workflow.md](./manual-trend-ingestion-workflow.md) — トレンド手動取り込みワークフロー
+- [trend-ingestion-records/README.md](./trend-ingestion-records/README.md) — トレンド取り込み判定記録

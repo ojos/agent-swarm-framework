@@ -10,7 +10,7 @@ packages/agent-swarm-framework/
 ├── config.schema.json      # 設定 JSON Schema（正規パス）
 ├── README.md               # このファイル
 ├── runtime-core/           # 実行基盤（workflow / command / monitor / worker）
-├── agent-skills/           # ロール別の基本 skill（7 ロール）
+├── agent-definitions/      # ロール契約（7 ロール）+ タスク手順 + 外部フィード
 ├── executors/              # リモート実行アダプタ（github-actions）
 ├── template-project/       # 設定・Issue・milestone 雛形
 └── docs/                   # ドキュメント
@@ -41,7 +41,7 @@ bash install.sh --non-interactive --config my-config.json --target-dir /path/to/
 
 1. ウィザードまたは設定ファイルで設定を入力
 2. `.preview/<projectSlug>/` にプレビューを生成
-3. `runtime-core` / `agent-skills` / `executors` / `template-project` をカテゴリ単位で確認
+3. `runtime-core` / `agent-definitions` / `executors` / `template-project` をカテゴリ単位で確認
 4. 確認後に target repository へ反映
 5. 確認付きで milestone / bootstrap issue を GitHub に起票
 
@@ -63,7 +63,7 @@ doctor モードでは、必須ファイル/スクリプト、必須コマンド
 - ASF は新規リポジトリだけでなく既存リポジトリへ段階導入できる。
 - まず `--retrofit-safe` + `automationStage=plan` で監査導入し、次に `implement/review/merge` を順次解放する。
 - `--retrofit-safe` は `executionMode=local`, `remoteProvider=none`, `mergePolicy=manual`, `orchestratorMode=local` を強制し、`--skip-github` も自動有効化する。
-- `--retrofit-safe` のカテゴリ既定は `runtime-core/agent-skills` を適用、`executors/template-project` をスキップとする。
+- `--retrofit-safe` のカテゴリ既定は `runtime-core/agent-definitions` を適用、`executors/template-project` をスキップとする。
 - サンプル設定は `retrofit-config.sample.json` を参照。
 - 詳細手順は [docs/install.md](docs/install.md) の「既存プロジェクトへの途中導入（Retrofit）」を参照。
 
@@ -117,6 +117,11 @@ dotfiles（ai-dotfiles）は、全プロジェクト共通の AI ルールや共
 
 ASF は単体利用も可能ですが、dotfiles を併用する場合は、dotfiles を基盤ポリシー、ASF をワークフローレイヤーとして扱います。
 
+## ロール契約とタスクプレイブック
+
+- `.multi-agent/role-contracts/*.md` はロール契約を定義する。
+- `.multi-agent/task-playbooks/*.md` はタスク単位の再利用手順を定義する。
+
 ## 詳細ドキュメント
 
 - [docs/install.md](docs/install.md) — CLI リファレンス・設定フィールド仕様
@@ -125,6 +130,10 @@ ASF は単体利用も可能ですが、dotfiles を併用する場合は、dotf
 - [docs/github-actions.md](docs/github-actions.md) — GitHub Actions executor 詳細
 - [docs/runtime-operations.md](docs/runtime-operations.md) — リリース手順・更新運用・互換性ルール
 - [docs/STATE_MANAGEMENT.md](docs/STATE_MANAGEMENT.md) — 状態管理詳細
+- [docs/ROLE_CONTRACT_TASK_PLAYBOOK_GUIDELINES.md](docs/ROLE_CONTRACT_TASK_PLAYBOOK_GUIDELINES.md) — ロール契約とタスクプレイブックの作成規範
+- [docs/operational-pr-review-checklist.md](docs/operational-pr-review-checklist.md) — PR レビュー運用チェックリスト
+- [docs/manual-trend-ingestion-workflow.md](docs/manual-trend-ingestion-workflow.md) — トレンド手動取り込みワークフロー
+- [docs/trend-ingestion-records/README.md](docs/trend-ingestion-records/README.md) — トレンド取り込み判定記録
 
 ---
 

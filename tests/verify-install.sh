@@ -113,10 +113,10 @@ if [[ -f "$TARGET_DIR/.agent-swarm-framework.config.json" ]]; then
   fi
 fi
 
-section "agent-skills"
-check_dir ".multi-agent/skills" ".multi-agent/skills/ ディレクトリ"
-for role in orchestrator planner implementer reviewer closer; do
-  check_file ".multi-agent/skills/${role}.md" "skill: $role"
+section "agent-definitions"
+check_dir ".multi-agent/role-contracts" ".multi-agent/role-contracts/ ディレクトリ"
+for role in orchestrator planner implementer reviewer closer intake-manager consult-facilitator; do
+  check_file ".multi-agent/role-contracts/${role}.md" "role contract: $role"
 done
 
 section "runtime-core / scripts"
